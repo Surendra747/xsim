@@ -1,26 +1,36 @@
-#include "InstructionDecoder.h"
+#pragma once
+#include "Fetcher.h"
+#include "Core.h"
+
 
 namespace xsim {
 
-	struct SystemInfo {
-		uint32_t numCores;
-		uint64_t ramSize;
-	};
-
 	class System {
+	
 	public:
+		
 		System(const System&) = delete;
 		System(System&&) = delete;
 		System operator=(const System&) = delete;
 
-		System(SystemInfo* pSystemInfo);
+		System(SystemConfig* pSystemConfig, std::string& rExecutable);
 		~System() = default;
 
-		void Execute(std::string& _ExecutableFile);
+		void Execute();
 
 	private:
-		uint64_t m_PC;
-		std::vector<Core> m_Cores;
-		Memory m_Memory;
+		
+		int64_t				m_GlobalPC;
+		SystemConfig*		pSystemConfig;
+
+		std::istringstream							m_ExecutableSS;
+		std::unordered_map<std::string, uint64_t>	m_Labels;
+
+		Fetcher				m_Fetcher;
+		std::vector<Core>	m_Cores;
+
+		PipelineMetrics		m_Metrics;
+
+		void ProcessLabels();
 	};
 } // namespace xsim
