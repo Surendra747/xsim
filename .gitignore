@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/xsim/xsim.vcxproj
+/xsim/xsim.vcxproj.filters
+/xsim/Int/vc143.idb
+/xsim/Int/xsim.tlog/CL.command.1.tlog
+/xsim/Int/xsim.tlog/Cl.items.tlog
+/xsim/Int/xsim.tlog/CL.read.1.tlog
+/xsim/Int/xsim.tlog/CL.write.1.tlog
+/xsim/Int/xsim.tlog/link.command.1.tlog
+/xsim/Int/xsim.tlog/link.read.1.tlog
+/xsim/Int/xsim.tlog/link.secondary.1.tlog
+/xsim/Int/xsim.tlog/link.write.1.tlog
