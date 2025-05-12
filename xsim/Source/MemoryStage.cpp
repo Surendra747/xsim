@@ -70,12 +70,42 @@ namespace xsim {
 
 	int64_t MemoryStage::Load(uint64_t& rAddress) {
 
-		return m_Memory[rAddress];
+		int64_t value;
+    
+		// Try cache first
+		if (m_Cache.lookup(rAddress, value)) {
+			return value;
+		}
+		
+		// Cache miss handling
+		value = m_Memory[rAddress];
+		
+		// Load into cache
+		m_Cache.update(rAddress, value);
+		
+		return value;
 	}
 
 	void MemoryStage::Store(uint64_t& rAddress, int64_t& rValue) {
 	
-		m_Memory[rAddress] = rValue;
+		if (m_WriteThrough) {
+        m_Cache.update(rAddress, rValue);
+        m_Memory[rAddress] = rValue;
+        return;
+		}
+		
+		// Write-back policy
+		int64_t dummy;
+		bool cacheHit = m_Cache.lookup(rAddress, dummy);
+		
+		// Update cache
+		m_Cache.update(rAddress, rValue);
+		
+		// Write-allocate vs write-no-allocate
+		if (!cacheHit && !m_WriteAllocate) {
+			// For write-no-allocate, update memory directly
+			m_Memory[rAddress] = rValue;
+		}
 	}
 
 	void MemoryStage::lw(Instruction& rInstruction) {
